@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UlaGo Cabz - Driver Elite Registration</title>
+    <style>
+        :root {
+            --premium-gold: #D4AF37;
+            --gold-glow: #F3E5AB;
+            --dark-red: #4A000A;
+            --deep-black: #0F0F0F;
+            --card-bg: #161616;
+        }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--dark-red) 100%); 
+            color: #ffffff; margin: 0; padding: 20px;
+            display: flex; align-items: center; justify-content: center; min-height: 100vh;
+        }
+        .form-container { 
+            width: 100%; max-width: 650px; background: var(--card-bg); 
+            padding: 40px; border-radius: 16px; 
+            box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.8); 
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        /* ===== Premium Header ===== */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+        }
+        .logo-ring {
+            width: 100px; height: 100px;
+            margin: 0 auto 14px auto;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #2a2a2a, #0a0a0a);
+            border: 2px solid var(--premium-gold);
+            box-shadow: 0 0 0 4px rgba(212,175,55,0.12), 0 8px 24px rgba(212,175,55,0.35);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+        h2.brand-name { 
+            text-align: center; color: var(--premium-gold); margin: 5px 0 2px 0; 
+            font-size: 30px; letter-spacing: 2px; text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(212,175,55,0.35);
+        }
+        .brand-tagline {
+            text-align: center; font-size: 11px; letter-spacing: 3px; 
+            color: var(--gold-glow); text-transform: uppercase; margin: 0 0 8px 0; opacity: 0.85;
+        }
+        p.subtitle { text-align: center; color: #ccc; font-size: 14px; margin: 0; }
+
+        .section-title { color: var(--premium-gold); border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 5px; margin: 30px 0 15px 0; font-size: 16px; letter-spacing: 0.5px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+        .full-width { grid-column: span 2; }
+        @media(max-width: 600px) { .full-width { grid-column: span 1; } }
+        label { font-weight: 600; margin-bottom: 8px; color: var(--gold-glow); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+        input[type="text"], input[type="tel"], input[type="email"], select, textarea { 
+            padding: 12px; background-color: #222; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 14px; transition: all 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--premium-gold); box-shadow: 0 0 8px rgba(212, 175, 55, 0.2); }
+        input[type="file"] { background: #1a1a1a; padding: 8px; border: 1px dashed var(--premium-gold); border-radius: 6px; color: #bbb; font-size: 12px; cursor: pointer; }
+        .file-hint { font-size: 11px; color: #888; margin-top: 4px; }
+        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin: 25px 0; text-align: left; }
+        .checkbox-group input { width: 20px; height: 20px; accent-color: var(--premium-gold); cursor: pointer; margin-top: 2px; }
+        .checkbox-group label { text-transform: none; font-size: 13px; color: #ddd; cursor: pointer; }
+        button { 
+            width: 100%; padding: 16px; background: linear-gradient(90deg, #B8860B 0%, var(--premium-gold) 100%);
+            border: none; color: var(--deep-black); font-weight: bold; font-size: 16px; letter-spacing: 1px;
+            cursor: pointer; border-radius: 6px; text-transform: uppercase; transition: all 0.3s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0px 5px 15px rgba(212, 175, 55, 0.4); }
+        button:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .error-text { color: #ff6b6b; font-size: 13px; margin-top: 14px; text-align: center; display: none; }
+
+        /* Premium Popup */
+        .overlay-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .popup-content { background: linear-gradient(135deg, #200005 0%, #111 100%); border: 2px solid var(--premium-gold); padding: 40px; border-radius: 15px; text-align: center; max-width: 480px; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4); }
+        .popup-content h3 { color: var(--premium-gold); font-size: 24px; margin-bottom: 15px; }
+        .popup-content p { color: #eee; font-size: 14.5px; line-height: 1.6; margin-bottom: 12px; }
+        .popup-content .highlight { color: #5ff27c; font-weight: bold; }
+        .popup-content button { width: auto; padding: 10px 30px; margin-top: 20px; background: transparent; border: 1px solid var(--premium-gold); color: var(--premium-gold); }
+        .popup-content button:hover { background: var(--premium-gold); color: #000; }
+    </style>
+</head>
+<body>
+
+<div class="form-container" id="formContainer">
+    <div class="brand-header">
+        <div class="logo-ring"><!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UlaGo Cabz - Driver Elite Registration</title>
+    <style>
+        :root {
+            --premium-gold: #D4AF37;
+            --gold-glow: #F3E5AB;
+            --dark-red: #4A000A;
+            --deep-black: #0F0F0F;
+            --card-bg: #161616;
+        }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--dark-red) 100%); 
+            color: #ffffff; margin: 0; padding: 20px;
+            display: flex; align-items: center; justify-content: center; min-height: 100vh;
+        }
+        .form-container { 
+            width: 100%; max-width: 650px; background: var(--card-bg); 
+            padding: 40px; border-radius: 16px; 
+            box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.8); 
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        /* ===== Premium Header ===== */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+        }
+        .logo-ring {
+            width: 100px; height: 100px;
+            margin: 0 auto 14px auto;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #2a2a2a, #0a0a0a);
+            border: 2px solid var(--premium-gold);
+            box-shadow: 0 0 0 4px rgba(212,175,55,0.12), 0 8px 24px rgba(212,175,55,0.35);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+        h2.brand-name { 
+            text-align: center; color: var(--premium-gold); margin: 5px 0 2px 0; 
+            font-size: 30px; letter-spacing: 2px; text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(212,175,55,0.35);
+        }
+        .brand-tagline {
+            text-align: center; font-size: 11px; letter-spacing: 3px; 
+            color: var(--gold-glow); text-transform: uppercase; margin: 0 0 8px 0; opacity: 0.85;
+        }
+        p.subtitle { text-align: center; color: #ccc; font-size: 14px; margin: 0; }
+
+        .section-title { color: var(--premium-gold); border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 5px; margin: 30px 0 15px 0; font-size: 16px; letter-spacing: 0.5px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+        .full-width { grid-column: span 2; }
+        @media(max-width: 600px) { .full-width { grid-column: span 1; } }
+        label { font-weight: 600; margin-bottom: 8px; color: var(--gold-glow); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+        input[type="text"], input[type="tel"], input[type="email"], select, textarea { 
+            padding: 12px; background-color: #222; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 14px; transition: all 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--premium-gold); box-shadow: 0 0 8px rgba(212, 175, 55, 0.2); }
+        input[type="file"] { background: #1a1a1a; padding: 8px; border: 1px dashed var(--premium-gold); border-radius: 6px; color: #bbb; font-size: 12px; cursor: pointer; }
+        .file-hint { font-size: 11px; color: #888; margin-top: 4px; }
+        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin: 25px 0; text-align: left; }
+        .checkbox-group input { width: 20px; height: 20px; accent-color: var(--premium-gold); cursor: pointer; margin-top: 2px; }
+        .checkbox-group label { text-transform: none; font-size: 13px; color: #ddd; cursor: pointer; }
+        button { 
+            width: 100%; padding: 16px; background: linear-gradient(90deg, #B8860B 0%, var(--premium-gold) 100%);
+            border: none; color: var(--deep-black); font-weight: bold; font-size: 16px; letter-spacing: 1px;
+            cursor: pointer; border-radius: 6px; text-transform: uppercase; transition: all 0.3s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0px 5px 15px rgba(212, 175, 55, 0.4); }
+        button:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .error-text { color: #ff6b6b; font-size: 13px; margin-top: 14px; text-align: center; display: none; }
+
+        /* Premium Popup */
+        .overlay-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .popup-content { background: linear-gradient(135deg, #200005 0%, #111 100%); border: 2px solid var(--premium-gold); padding: 40px; border-radius: 15px; text-align: center; max-width: 480px; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4); }
+        .popup-content h3 { color: var(--premium-gold); font-size: 24px; margin-bottom: 15px; }
+        .popup-content p { color: #eee; font-size: 14.5px; line-height: 1.6; margin-bottom: 12px; }
+        .popup-content .highlight { color: #5ff27c; font-weight: bold; }
+        .popup-content button { width: auto; padding: 10px 30px; margin-top: 20px; background: transparent; border: 1px solid var(--premium-gold); color: var(--premium-gold); }
+        .popup-content button:hover { background: var(--premium-gold); color: #000; }
+    </style>
+</head>
+<body>
+
+<div class="form-container" id="formContainer">
+    <div class="brand-header">
+        <div class="logo-ring">
+            <img src="logo.png" alt="UlaGo Cabz Logo" onerror="this.style.display='none'">
+        </div>
+        <h2 class="brand-name">UlaGo Cabz</h2>
+        <div class="brand-tagline">Elite Driver Network</div>
+        <p class="subtitle">Driver Registration Portal — Premium Network Partner</p>
+    </div>
+
+    <!-- https://script.google.com/macros/s/AKfycbykj7A7RfT9Mvrh9uSagHT7KbotIdBQciHrM-rHISTAE3nCwOoDtf0CMQXpqgjYJ6q4YQ/exec -->
+    <form id="driverForm">
+
+        <div class="section-title">Personal Profile (தனிப்பட்ட விவரங்கள்)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Driver Name (ஓட்டுநர் பெயர்)</label>
+                <input type="text" name="Driver_Name" required>
+            </div>
+            <div class="form-group">
+                <label>Mobile Number (கைபேசி எண்)</label>
+                <input type="tel" name="Phone" pattern="[0-9]{10}" placeholder="Primary Call No." required>
+            </div>
+            <div class="form-group">
+                <label>WhatsApp Number (வாட்ஸ்அப் எண்) - Optional</label>
+                <input type="tel" name="WhatsApp_Number" pattern="[0-9]{10}" placeholder="For Updates (Optional)">
+            </div>
+            <div class="form-group">
+                <label>Base Operating City / District (இயக்கும் மாவட்டம்)</label>
+                <select name="Operating_City" required>
+                    <option value="">Select District</option>
+                    <option value="Ariyalur">Ariyalur</option>
+                    <option value="Chengalpattu">Chengalpattu</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Coimbatore">Coimbatore</option>
+                    <option value="Cuddalore">Cuddalore</option>
+                    <option value="Dharmapuri">Dharmapuri</option>
+                    <option value="Dindigul">Dindigul</option>
+                    <option value="Erode">Erode</option>
+                    <option value="Kallakurichi">Kallakurichi</option>
+                    <option value="Kanchipuram">Kanchipuram</option>
+                    <option value="Kanyakumari">Kanyakumari</option>
+                    <option value="Karur">Karur</option>
+                    <option value="Krishnagiri">Krishnagiri</option>
+                    <option value="Madurai">Madurai</option>
+                    <option value="Mayiladuthurai">Mayiladuthurai</option>
+                    <option value="Nagapattinam">Nagapattinam</option>
+                    <option value="Namakkal">Namakkal</option>
+                    <option value="Nilgiris">Nilgiris</option>
+                    <option value="Perambalur">Perambalur</option>
+                    <option value="Pudukkottai">Pudukkottai</option>
+                    <option value="Ramanathapuram">Ramanathapuram</option>
+                    <option value="Ranipet">Ranipet</option>
+                    <option value="Salem">Salem</option>
+                    <option value="Sivagangai">Sivagangai</option>
+                    <option value="Tenkasi">Tenkasi</option>
+                    <option value="Thanjavur">Thanjavur</option>
+                    <option value="Theni">Theni</option>
+                    <option value="Thoothukudi">Thoothukudi</option>
+                    <option value="Tiruchirappalli">Tiruchirappalli</option>
+                    <option value="Tirunelveli">Tirunelveli</option>
+                    <option value="Tirupathur">Tirupathur</option>
+                    <option value="Tiruppur">Tiruppur</option>
+                    <option value="Tiruvallur">Tiruvallur</option>
+                    <option value="Tiruvannamalai">Tiruvannamalai</option>
+                    <option value="Tiruvarur">Tiruvarur</option>
+                    <option value="Vellore">Vellore</option>
+                    <option value="Viluppuram">Viluppuram</option>
+                    <option value="Virudhunagar">Virudhunagar</option>
+                </select>
+            </div>
+            <div class="form-group full-width">
+                <label>Permanent Address (முழு முகவரி)</label>
+                <textarea name="Address" rows="2" required></textarea>
+            </div>
+        </div>
+
+        <div class="section-title">Vehicle Information (வாகன விவரங்கள்)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Vehicle Model Year (வண்டி மாடல் வருடம்)</label>
+                <input type="text" name="Vehicle_Model_Year" placeholder="e.g. 2024" required>
+            </div>
+            <div class="form-group">
+                <label>Vehicle Registration No (வண்டி எண்)</label>
+                <input type="text" name="Vehicle_Registration_Number" placeholder="e.g. TN 37 AB 1234" required>
+            </div>
+        </div>
+
+        <div class="section-title">Identity & Document Numbers (ஆவண எண்கள்)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Aadhaar Card Number (ஆதார் எண்)</label>
+                <input type="text" name="Aadhaar_Number" pattern="[0-9]{12}" placeholder="12 Digit No." required>
+            </div>
+            <div class="form-group">
+                <label>Driving License Number (உரிம எண்)</label>
+                <input type="text" name="License_Number" placeholder="DL Number" required>
+            </div>
+        </div>
+
+        <div class="section-title">Document Uploads (ஆவணப் புகைப்படங்கள் - Max 2MB)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Aadhaar Front (ஆதார் முன் பக்கம்)</label>
+                <input type="file" name="file_aadhaar_front" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Aadhaar Back (ஆதார் பின் பக்கம்)</label>
+                <input type="file" name="file_aadhaar_back" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>License Front (உரிமம் முன் பக்கம்)</label>
+                <input type="file" name="file_license_front" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>License Back (உரிமம் பின் பக்கம்)</label>
+                <input type="file" name="file_license_back" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Vehicle RC Book (வண்டி RC நகல்)</label>
+                <input type="file" name="file_vehicle_rc" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Insurance Copy (காப்பீட்டு நகல்)</label>
+                <input type="file" name="file_insurance" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group full-width">
+                <label>Car Front View Photo (காரின் முன் பக்க தோற்றம்)</label>
+                <input type="file" name="file_car_front" class="docfile" accept="image/*" required>
+            </div>
+        </div>
+        <div class="file-hint">Ovvoru file-um 2MB-ku kammi irukkanum. Photo edutha pinnadi file size periyathaa irundha, kammiya resize pannitu upload pannunga.</div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="termsCheck" required>
+            <label for="termsCheck">I hereby declare that all submitted vehicle documents are valid. I agree to ride under UlaGo Cabz safety terms & guidelines.</label>
+        </div>
+
+        <p class="error-text" id="errorText"></p>
+
+        <button type="submit" id="submitBtn">Register & Submit Profile</button>
+    </form>
+</div>
+
+<!-- Premium Status Popup -->
+<div class="overlay-popup" id="statusPopup">
+    <div class="popup-content" id="popupContent">
+        <div style="font-size: 50px; margin-bottom: 10px;">✨</div>
+        <h3>🎉 Documents Logged Successfully</h3>
+        <p>Thanks for the UlaGo Onboard!</p>
+        <p>Ungal application <span class="highlight">verification</span>-ku poiyirukku. Ride start panna namma <span class="highlight">WhatsApp</span>-la connect aaiduvom.</p>
+        <p style="font-size:12.5px;color:#aaa;">Please wait, namma team ungala soon contact pannuvanga.</p>
+        <button onclick="document.getElementById('statusPopup').style.display='none'">Close</button>
+    </div>
+</div>
+
+<script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxTxi7hmfWoO8wVgHX9kfaQatmmX5VphGwJWwKJgcARdlHpXjkFY-wlSOS42nOrIru8/exec"; // <-- ungal deploy panna Apps Script URL inga podunga
+
+    const form = document.getElementById('driverForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorText = document.getElementById('errorText');
+    const popup = document.getElementById('statusPopup');
+    const popupContent = document.getElementById('popupContent');
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(",")[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function showError(msg) {
+        errorText.textContent = msg;
+        errorText.style.display = 'block';
+    }
+
+    function showThankYouScreen() {
+        // Replace whole form card with a clean "Thanks for onboarding" page
+        document.getElementById('formContainer').innerHTML = `
+            <div style="text-align:center; padding: 30px 10px;">
+                <div style="font-size:60px; margin-bottom:10px;">🎉</div>
+                <h2 class="brand-name" style="margin-bottom:6px;">Thanks for UlaGo Onboard!</h2>
+                <p style="color:#ddd; font-size:15px; line-height:1.7; margin: 18px 0;">
+                    Ungal driver registration <b style="color:#5ff27c;">successfully</b> submit aagiduchu.<br>
+                    Documents verification-ku poiyirukku.
+                </p>
+                <p style="color:#ddd; font-size:15px; line-height:1.7;">
+                    Verification mudinjadhum, ride start panna namma <b style="color:var(--premium-gold);">WhatsApp</b>-la ungala connect pannuvom.
+                </p>
+                <p style="color:#888; font-size:13px; margin-top:25px;">Please wait for our team's WhatsApp message. Nandri! 🙏</p>
+            </div>
+        `;
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        errorText.style.display = 'none';
+
+        if (WEB_APP_URL.indexOf("YOUR_GOOGLE_APPS_SCRIPT") !== -1) {
+            showError("Apps Script Web App URL innum set pannala. Script la WEB_APP_URL update pannunga.");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Uploading... Please wait";
+
+        try {
+            const formData = new FormData(form);
+            const payload = {};
+            formData.forEach((value, key) => { payload[key] = value; });
+
+            // Convert each file input to base64 and check size (max 2MB)
+            const fileInputs = document.querySelectorAll('.docfile');
+            for (const input of fileInputs) {
+                const file = input.files[0];
+                if (!file) continue;
+                if (file.size > 2 * 1024 * 1024) {
+                    showError(input.previousElementSibling.textContent + " - file size 2MB-ku mela irukku. Konjam kammi size-la podunga.");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Register & Submit Profile";
+                    return;
+                }
+                const base64 = await fileToBase64(file);
+                payload[input.name] = {
+                    base64: base64,
+                    mimeType: file.type,
+                    fileName: file.name
+                };
+            }
+
+            const response = await fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.status === "duplicate") {
+                showError("Indha phone number already register aagiyachu (" + result.phone + "). ஒரு number ku ஒரே ஒரு registration tha allow.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Register & Submit Profile";
+                return;
+            }
+
+            if (result.status !== "success") {
+                showError(result.message || "Submit aagala, konjam neram poi try pannunga.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Register & Submit Profile";
+                return;
+            }
+
+            showThankYouScreen();
+
+        } catch (err) {
+            console.error(err);
+            showError("Network/Server error. Konjam neram poi try pannunga.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Register & Submit Profile";
+        }
+    });
+</script>
+
+</body>
+</html>
+            <img src="logo.png" alt="UlaGo Cabz Logo" onerror="this.style.display='none'">
+        </div>
+        <h2 class="brand-name">UlaGo Cabz</h2>
+        <div class="brand-tagline">Elite Driver Network</div>
+        <p class="subtitle">Driver Registration Portal — Premium Network Partner</p>
+    </div>
+
+    <!-- https://script.google.com/macros/s/AKfycbykj7A7RfT9Mvrh9uSagHT7KbotIdBQciHrM-rHISTAE3nCwOoDtf0CMQXpqgjYJ6q4YQ/exec -->
+    <form id="driverForm">
+
+        <div class="section-title">Personal Profile (தனிப்பட்ட விவரங்கள்)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Driver Name (ஓட்டுநர் பெயர்)</label>
+                <input type="text" name="Driver_Name" required>
+            </div>
+            <div class="form-group">
+                <label>Mobile Number (கைபேசி எண்)</label>
+                <input type="tel" name="Phone" pattern="[0-9]{10}" placeholder="Primary Call No." required>
+            </div>
+            <div class="form-group">
+                <label>WhatsApp Number (வாட்ஸ்அப் எண்) - Optional</label>
+                <input type="tel" name="WhatsApp_Number" pattern="[0-9]{10}" placeholder="For Updates (Optional)">
+            </div>
+            <div class="form-group">
+                <label>Base Operating City / District (இயக்கும் மாவட்டம்)</label>
+                <select name="Operating_City" required>
+                    <option value="">Select District</option>
+                    <option value="Ariyalur">Ariyalur</option>
+                    <option value="Chengalpattu">Chengalpattu</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Coimbatore">Coimbatore</option>
+                    <option value="Cuddalore">Cuddalore</option>
+                    <option value="Dharmapuri">Dharmapuri</option>
+                    <option value="Dindigul">Dindigul</option>
+                    <option value="Erode">Erode</option>
+                    <option value="Kallakurichi">Kallakurichi</option>
+                    <option value="Kanchipuram">Kanchipuram</option>
+                    <option value="Kanyakumari">Kanyakumari</option>
+                    <option value="Karur">Karur</option>
+                    <option value="Krishnagiri">Krishnagiri</option>
+                    <option value="Madurai">Madurai</option>
+                    <option value="Mayiladuthurai">Mayiladuthurai</option>
+                    <option value="Nagapattinam">Nagapattinam</option>
+                    <option value="Namakkal">Namakkal</option>
+                    <option value="Nilgiris">Nilgiris</option>
+                    <option value="Perambalur">Perambalur</option>
+                    <option value="Pudukkottai">Pudukkottai</option>
+                    <option value="Ramanathapuram">Ramanathapuram</option>
+                    <option value="Ranipet">Ranipet</option>
+                    <option value="Salem">Salem</option>
+                    <option value="Sivagangai">Sivagangai</option>
+                    <option value="Tenkasi">Tenkasi</option>
+                    <option value="Thanjavur">Thanjavur</option>
+                    <option value="Theni">Theni</option>
+                    <option value="Thoothukudi">Thoothukudi</option>
+                    <option value="Tiruchirappalli">Tiruchirappalli</option>
+                    <option value="Tirunelveli">Tirunelveli</option>
+                    <option value="Tirupathur">Tirupathur</option>
+                    <option value="Tiruppur">Tiruppur</option>
+                    <option value="Tiruvallur">Tiruvallur</option>
+                    <option value="Tiruvannamalai">Tiruvannamalai</option>
+                    <option value="Tiruvarur">Tiruvarur</option>
+                    <option value="Vellore">Vellore</option>
+                    <option value="Viluppuram">Viluppuram</option>
+                    <option value="Virudhunagar">Virudhunagar</option>
+                </select>
+            </div>
+            <div class="form-group full-width">
+                <label>Permanent Address (முழு முகவரி)</label>
+                <textarea name="Address" rows="2" required></textarea>
+            </div>
+        </div>
+
+        <div class="section-title">Vehicle Information (வாகன விவரங்கள்)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Vehicle Model Year (வண்டி மாடல் வருடம்)</label>
+                <input type="text" name="Vehicle_Model_Year" placeholder="e.g. 2024" required>
+            </div>
+            <div class="form-group">
+                <label>Vehicle Registration No (வண்டி எண்)</label>
+                <input type="text" name="Vehicle_Registration_Number" placeholder="e.g. TN 37 AB 1234" required>
+            </div>
+        </div>
+
+        <div class="section-title">Identity & Document Numbers (ஆவண எண்கள்)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Aadhaar Card Number (ஆதார் எண்)</label>
+                <input type="text" name="Aadhaar_Number" pattern="[0-9]{12}" placeholder="12 Digit No." required>
+            </div>
+            <div class="form-group">
+                <label>Driving License Number (உரிம எண்)</label>
+                <input type="text" name="License_Number" placeholder="DL Number" required>
+            </div>
+        </div>
+
+        <div class="section-title">Document Uploads (ஆவணப் புகைப்படங்கள் - Max 2MB)</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Aadhaar Front (ஆதார் முன் பக்கம்)</label>
+                <input type="file" name="file_aadhaar_front" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Aadhaar Back (ஆதார் பின் பக்கம்)</label>
+                <input type="file" name="file_aadhaar_back" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>License Front (உரிமம் முன் பக்கம்)</label>
+                <input type="file" name="file_license_front" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>License Back (உரிமம் பின் பக்கம்)</label>
+                <input type="file" name="file_license_back" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Vehicle RC Book (வண்டி RC நகல்)</label>
+                <input type="file" name="file_vehicle_rc" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Insurance Copy (காப்பீட்டு நகல்)</label>
+                <input type="file" name="file_insurance" class="docfile" accept="image/*" required>
+            </div>
+            <div class="form-group full-width">
+                <label>Car Front View Photo (காரின் முன் பக்க தோற்றம்)</label>
+                <input type="file" name="file_car_front" class="docfile" accept="image/*" required>
+            </div>
+        </div>
+        <div class="file-hint">Ovvoru file-um 2MB-ku kammi irukkanum. Photo edutha pinnadi file size periyathaa irundha, kammiya resize pannitu upload pannunga.</div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="termsCheck" required>
+            <label for="termsCheck">I hereby declare that all submitted vehicle documents are valid. I agree to ride under UlaGo Cabz safety terms & guidelines.</label>
+        </div>
+
+        <p class="error-text" id="errorText"></p>
+
+        <button type="submit" id="submitBtn">Register & Submit Profile</button>
+    </form>
+</div>
+
+<!-- Premium Status Popup -->
+<div class="overlay-popup" id="statusPopup">
+    <div class="popup-content" id="popupContent">
+        <div style="font-size: 50px; margin-bottom: 10px;">✨</div>
+        <h3>🎉 Documents Logged Successfully</h3>
+        <p>Thanks for the UlaGo Onboard!</p>
+        <p>Ungal application <span class="highlight">verification</span>-ku poiyirukku. Ride start panna namma <span class="highlight">WhatsApp</span>-la connect aaiduvom.</p>
+        <p style="font-size:12.5px;color:#aaa;">Please wait, namma team ungala soon contact pannuvanga.</p>
+        <button onclick="document.getElementById('statusPopup').style.display='none'">Close</button>
+    </div>
+</div>
+
+<script>
+    const WEB_APP_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"; // <-- ungal deploy panna Apps Script URL inga podunga
+
+    const form = document.getElementById('driverForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorText = document.getElementById('errorText');
+    const popup = document.getElementById('statusPopup');
+    const popupContent = document.getElementById('popupContent');
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(",")[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function showError(msg) {
+        errorText.textContent = msg;
+        errorText.style.display = 'block';
+    }
+
+    function showThankYouScreen() {
+        // Replace whole form card with a clean "Thanks for onboarding" page
+        document.getElementById('formContainer').innerHTML = `
+            <div style="text-align:center; padding: 30px 10px;">
+                <div style="font-size:60px; margin-bottom:10px;">🎉</div>
+                <h2 class="brand-name" style="margin-bottom:6px;">Thanks for UlaGo Onboard!</h2>
+                <p style="color:#ddd; font-size:15px; line-height:1.7; margin: 18px 0;">
+                    Ungal driver registration <b style="color:#5ff27c;">successfully</b> submit aagiduchu.<br>
+                    Documents verification-ku poiyirukku.
+                </p>
+                <p style="color:#ddd; font-size:15px; line-height:1.7;">
+                    Verification mudinjadhum, ride start panna namma <b style="color:var(--premium-gold);">WhatsApp</b>-la ungala connect pannuvom.
+                </p>
+                <p style="color:#888; font-size:13px; margin-top:25px;">Please wait for our team's WhatsApp message. Nandri! 🙏</p>
+            </div>
+        `;
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        errorText.style.display = 'none';
+
+        if (WEB_APP_URL.indexOf("YOUR_GOOGLE_APPS_SCRIPT") !== -1) {
+            showError("Apps Script Web App URL innum set pannala. Script la WEB_APP_URL update pannunga.");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Uploading... Please wait";
+
+        try {
+            const formData = new FormData(form);
+            const payload = {};
+            formData.forEach((value, key) => { payload[key] = value; });
+
+            // Convert each file input to base64 and check size (max 2MB)
+            const fileInputs = document.querySelectorAll('.docfile');
+            for (const input of fileInputs) {
+                const file = input.files[0];
+                if (!file) continue;
+                if (file.size > 2 * 1024 * 1024) {
+                    showError(input.previousElementSibling.textContent + " - file size 2MB-ku mela irukku. Konjam kammi size-la podunga.");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Register & Submit Profile";
+                    return;
+                }
+                const base64 = await fileToBase64(file);
+                payload[input.name] = {
+                    base64: base64,
+                    mimeType: file.type,
+                    fileName: file.name
+                };
+            }
+
+            const response = await fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.status === "duplicate") {
+                showError("Indha phone number already register aagiyachu (" + result.phone + "). ஒரு number ku ஒரே ஒரு registration tha allow.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Register & Submit Profile";
+                return;
+            }
+
+            if (result.status !== "success") {
+                showError(result.message || "Submit aagala, konjam neram poi try pannunga.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Register & Submit Profile";
+                return;
+            }
+
+            showThankYouScreen();
+
+        } catch (err) {
+            console.error(err);
+            showError("Network/Server error. Konjam neram poi try pannunga.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Register & Submit Profile";
+        }
+    });
+</script>
+
+</body>
+</html>
