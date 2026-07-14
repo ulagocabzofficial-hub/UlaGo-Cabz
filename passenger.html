@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book a premium, verified cab with UlaGo Cabz — One Way, Round Trip, or Local Rentals across Tamil Nadu.">
+<title>UlaGo Cabz | Book a Ride</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="brand" onclick="window.location.href='index.html'">
+        <div class="brand-crest"><img src="assets/logo.png" alt="UlaGo" onerror="this.style.display='none'"></div>
+        <div class="brand-text">
+            <h2>ULA<span>GO</span></h2>
+            <span class="brand-tag">Cabz</span>
+        </div>
+    </div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="driver.html">Drive With Us</a>
+    </nav>
+    <div class="header-right">
+        <a href="#" class="btn-app js-download-app">Download App</a>
+        <a href="tel:+918300783302" class="btn-support">Support</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+</header>
+
+<div class="mobile-panel" id="mobilePanel">
+    <a href="index.html">Home</a>
+    <a href="driver.html">Drive With Us</a>
+    <a href="#" class="btn-app js-download-app">Download App</a>
+    <a href="tel:+918300783302" class="btn-support">Support</a>
+</div>
+
+<!-- COMING SOON MODAL -->
+<div class="cs-overlay" id="csOverlay">
+    <div class="cs-modal">
+        <div class="cs-icon">🚀</div>
+        <h3 id="csTitle">Coming Soon</h3>
+        <p id="csText"></p>
+        <button onclick="closeComingSoon()">Got it</button>
+    </div>
+</div>
+
+<main class="container">
+    <!-- COMING SOON (shown instead of Select Service when PASSENGER_BOOKING_LIVE is false in js/config.js) -->
+    <div id="passengerComingSoon" class="view-section">
+        <div class="form-panel active" style="text-align:center; max-width: 560px; margin: 0 auto;">
+            <div style="font-size: 52px; margin-bottom: 18px;">🕒</div>
+            <h2 style="color: var(--text-main); margin-bottom: 12px; font-size: 26px;">Passenger Booking — Coming Soon</h2>
+            <p style="color: var(--text-muted); margin-bottom: 26px;">We're putting the final touches on online passenger booking. It'll be live shortly — thanks for your patience.</p>
+            <a href="driver.html" class="btn-grand">Join as a UlaGo Cruzer instead →</a>
+        </div>
+    </div>
+
+    <!-- SELECT SERVICE -->
+    <div id="view-select" class="view-section active">
+        <h2 class="section-title">Select Your Journey</h2>
+        <p class="section-subtitle">Choose the type of premium service you require today.</p>
+        <div class="grid-cards">
+            <div class="glass-card" onclick="openBookingForm('OneWay')" style="cursor:pointer;">
+                <div class="glass-icon">I</div><h3>One Way Drop</h3><p>Perfect for inter-city travel.</p>
+            </div>
+            <div class="glass-card" onclick="openBookingForm('RoundTrip')" style="cursor:pointer;">
+                <div class="glass-icon">II</div><h3>Round Trip</h3><p>Keep the cab with you until you return.</p>
+            </div>
+            <div class="glass-card" onclick="openBookingForm('Rental')" style="cursor:pointer;">
+                <div class="glass-icon">III</div><h3>Local Rentals</h3><p>Hourly packages for local city commutes.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKING FORMS -->
+    <div id="view-form" class="view-section form-wrapper">
+        <div style="color:var(--text-muted); cursor:pointer; margin-bottom:20px; font-weight:600;" onclick="navigate('view-select')">← Back to Services</div>
+
+        <!-- ONE WAY FORM -->
+        <div class="form-panel" id="OneWayForm">
+            <h3 class="section-title" style="border:none;">One Way Booking</h3>
+            <form onsubmit="handleBooking(event, 'OneWay')">
+                <div class="form-grid">
+                    <div><label>Passenger Name</label><input type="text" name="Passenger_Name" required></div>
+                    <div><label>Mobile Number</label><input type="tel" name="Mobile_Number" maxlength="10" required><div class="error-text">10-digit number required.</div></div>
+                    <div class="full-width"><label>WhatsApp Number</label><input type="tel" name="WhatsApp_Number" maxlength="10" required><div class="error-text">10-digit number required.</div></div>
+                    <div class="full-width"><label>Pickup Location</label><input type="text" name="Pickup_Location" list="tn-districts" required></div>
+                    <div class="full-width"><label>Drop Location</label><input type="text" name="Drop_Location" list="tn-districts" required></div>
+                    <div><label>Pickup Date</label><input type="date" name="Pickup_Date" required></div>
+                    <div><label>Pickup Time</label><input type="time" name="Pickup_Time" required></div>
+                    <div class="full-width"><label>Cab Type</label><select name="Cab_Type" required><option value="">Select Cab</option><option>Mini</option><option>Sedan</option><option>SUV</option><option>Innova Premium</option></select></div>
+                </div>
+                <button type="submit" class="btn-grand" style="width: 100%; margin-top: 30px;">Confirm Booking</button>
+            </form>
+        </div>
+
+        <!-- ROUND TRIP FORM -->
+        <div class="form-panel" id="RoundTripForm">
+            <h3 class="section-title" style="border:none;">Round Trip Booking</h3>
+            <form onsubmit="handleBooking(event, 'RoundTrip')">
+                <div class="form-grid">
+                    <div><label>Passenger Name</label><input type="text" name="Passenger_Name" required></div>
+                    <div><label>Mobile Number</label><input type="tel" name="Mobile_Number" maxlength="10" required><div class="error-text">10-digit number required.</div></div>
+                    <div class="full-width"><label>WhatsApp Number</label><input type="tel" name="WhatsApp_Number" maxlength="10" required><div class="error-text">10-digit number required.</div></div>
+                    <div class="full-width"><label>Pickup Location</label><input type="text" name="Pickup_Location" list="tn-districts" required></div>
+                    <div class="full-width"><label>Drop Location</label><input type="text" name="Drop_Location" list="tn-districts" required></div>
+                    <div><label>Start Date</label><input type="date" name="Start_Date" required></div>
+                    <div><label>Return Date</label><input type="date" name="Return_Date" required></div>
+                    <div><label>Pickup Time</label><input type="time" name="Pickup_Time" required></div>
+                    <div><label>Cab Type</label><select name="Cab_Type" required><option value="">Select Cab</option><option>Mini</option><option>Sedan</option><option>SUV</option></select></div>
+                </div>
+                <button type="submit" class="btn-grand" style="width: 100%; margin-top: 30px;">Confirm Booking</button>
+            </form>
+        </div>
+
+        <!-- RENTAL FORM -->
+        <div class="form-panel" id="RentalForm">
+            <h3 class="section-title" style="border:none;">Local Rental Booking</h3>
+            <form onsubmit="handleBooking(event, 'Rental')">
+                <div class="form-grid">
+                    <div><label>Passenger Name</label><input type="text" name="Passenger_Name" required></div>
+                    <div><label>Mobile Number</label><input type="tel" name="Mobile_Number" maxlength="10" required><div class="error-text">10-digit number required.</div></div>
+                    <div class="full-width"><label>WhatsApp Number</label><input type="tel" name="WhatsApp_Number" maxlength="10" required><div class="error-text">10-digit number required.</div></div>
+                    <div><label>City</label><input type="text" name="City" list="tn-districts" required></div>
+                    <div><label>Selected Package</label><select name="Selected_Package" required><option value="">Choose Package</option><option>2 Hrs / 20 KM</option><option>4 Hrs / 40 KM</option><option>8 Hrs / 80 KM</option><option>12 Hrs / 120 KM</option></select></div>
+                    <div class="full-width"><label>Pickup Address</label><input type="text" name="Pickup_Address" required></div>
+                    <div><label>Pickup Date</label><input type="date" name="Pickup_Date" required></div>
+                    <div><label>Pickup Time</label><input type="time" name="Pickup_Time" required></div>
+                    <div class="full-width"><label>Cab Type</label><select name="Cab_Type" required><option value="">Select Cab</option><option>Mini</option><option>Sedan</option><option>SUV</option></select></div>
+                </div>
+                <button type="submit" class="btn-grand" style="width: 100%; margin-top: 30px;">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- THANK YOU VIEW -->
+    <div id="view-thanks" class="view-section form-wrapper">
+        <div class="form-panel active" style="text-align: center; padding: 60px 40px;">
+            <div style="font-size: 70px; margin-bottom: 20px;">✨</div>
+            <h2 style="color: var(--text-main); margin-bottom: 10px;">Booking Confirmed!</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Our team will reach you on WhatsApp/Call shortly.</p>
+            <button onclick="window.location.href='index.html'" class="btn-support" style="padding: 12px 30px;">Back to Home</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-grid">
+        <div class="foot-col">
+            <h3>UlaGo Cabz</h3>
+            <p>Redefining comfort and safety. Tamil Nadu's elite driver network.</p>
+        </div>
+        <div class="foot-col">
+            <h3>Contact Support</h3>
+            <p>ulago.cabz.official@gmail.com</p>
+            <p>+91 83007 83302</p>
+        </div>
+        <div class="foot-col">
+            <h3>Quick Links</h3>
+            <a href="index.html">Home</a>
+            <a href="passenger.html" class="js-badge-target">Book a Ride</a>
+            <a href="driver.html" class="driver-link">Become a driver with Ulago cruzer</a>
+        </div>
+    </div>
+    <div class="copyright">&copy; 2026 UlaGo Premium Network. All Rights Reserved.</div>
+</footer>
+
+<datalist id="tn-districts">
+    <option>Ariyalur</option><option>Chengalpattu</option><option>Chennai</option><option>Coimbatore</option><option>Cuddalore</option><option>Dharmapuri</option><option>Dindigul</option><option>Erode</option><option>Kallakurichi</option><option>Kanchipuram</option><option>Kanyakumari</option><option>Karur</option><option>Krishnagiri</option><option>Madurai</option><option>Mayiladuthurai</option><option>Nagapattinam</option><option>Namakkal</option><option>Nilgiris</option><option>Perambalur</option><option>Pudukkottai</option><option>Ramanathapuram</option><option>Ranipet</option><option>Salem</option><option>Sivaganga</option><option>Tenkasi</option><option>Thanjavur</option><option>Theni</option><option>Thoothukudi</option><option>Tiruchirappalli</option><option>Tirunelveli</option><option>Tirupathur</option><option>Tiruppur</option><option>Tiruvallur</option><option>Tiruvannamalai</option><option>Tiruvarur</option><option>Vellore</option><option>Viluppuram</option><option>Virudhunagar</option>
+</datalist>
+
+<script src="js/config.js"></script>
+<script src="js/site.js"></script>
+<script src="js/passenger.js"></script>
+</body>
+</html>
